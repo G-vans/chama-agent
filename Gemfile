@@ -66,3 +66,15 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+# API integrations
+gem "faraday"           # HTTP client for Daraja + OpenAI
+gem "dotenv-rails"      # Load .env variables in dev
+gem "ruby-openai"       # OpenAI SDK
+
+# Background jobs (for M-PESA callbacks + AI reports)
+gem "sidekiq"
+
+# PDF generation for member statements
+gem "prawn"
+gem "prawn-table"
