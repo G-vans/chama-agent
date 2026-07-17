@@ -1,0 +1,2 @@
+class Chama < ApplicationRecord
+end
