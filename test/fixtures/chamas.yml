@@ -2,10 +2,10 @@
 
 one:
   name: MyString
-  contibution_amount: 9.99
+  contribution_amount: 9.99
   frequency: MyString
 
 two:
   name: MyString
-  contibution_amount: 9.99
+  contribution_amount: 9.99
   frequency: MyString

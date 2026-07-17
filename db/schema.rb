@@ -21,7 +21,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_17_144755) do
   end
 
   create_table "chamas", force: :cascade do |t|
-    t.decimal "contibution_amount"
+    t.decimal "contribution_amount"
     t.datetime "created_at", null: false
     t.string "frequency"
     t.string "name"
