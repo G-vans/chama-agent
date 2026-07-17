@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  chama: one
+  content: MyText
+  generated_at: 2026-07-17 17:47:55
+
+two:
+  chama: two
+  content: MyText
+  generated_at: 2026-07-17 17:47:55
