@@ -1,0 +1,2 @@
+module AgentReportsHelper
+end
