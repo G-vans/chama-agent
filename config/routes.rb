@@ -11,4 +11,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  root "chamas#index"
+  resources :chamas, only: [:index, :show] do
+    resources :agent_reports, only: [:create]
+  end
 end
