@@ -25,7 +25,7 @@ class AgentReportService
 
   def build_context
     members = @chama.members.includes(:contributions)
-
+  
     {
       chama: {
         name: @chama.name,
@@ -34,25 +34,23 @@ class AgentReportService
         member_count: members.count
       },
       members: members.map do |m|
-        total_paid = m.contributions.where(status: "completed").sum(:amount).to_i
-        expected = expected_contributions_for(m)
         {
           name: m.name,
           phone: m.phone,
           joined_at: m.joined_at.to_s,
-          total_paid: total_paid,
-          expected: expected,
-          arrears: [expected - total_paid, 0].max,
+          total_paid: m.total_paid,
+          expected: m.expected_total,
+          arrears: m.arrears,
           last_payment_at: m.contributions.where(status: "completed").maximum(:paid_at)&.to_s
         }
       end
     }
   end
 
-  def expected_contributions_for(member)
-    months_since_joined = ((Date.today - member.joined_at).to_i / 30.0).ceil
-    (months_since_joined * @chama.contribution_amount).to_i
-  end
+  # def expected_contributions_for(member)
+  #   months_since_joined = ((Date.today - member.joined_at).to_i / 30.0).ceil
+  #   (months_since_joined * @chama.contribution_amount).to_i
+  # end
 
   def call_llm(context)
     @client.chat(
