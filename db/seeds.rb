@@ -11,7 +11,7 @@
 chama = Chama.create!(name: "Demo Chama", contribution_amount: 5000, frequency: "monthly")
 
 [
-  ["Jane Doe", "254712345678"],
+  ["Jane Doe", "254708374149"],
   ["Peter Kariuki", "254722334455"],
   ["Mary Wanjiku", "254733445566"],
   ["Samuel Otieno", "254744556677"],
