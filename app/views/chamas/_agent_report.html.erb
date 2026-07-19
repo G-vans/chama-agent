@@ -1,0 +1,54 @@
+<%= turbo_frame_tag "agent_report" do %>
+  <section class="bg-white border rounded-lg p-6 shadow-sm">
+    <div class="flex justify-between items-start mb-4">
+      <h2 class="text-xl font-semibold">Chama Health Report</h2>
+      <%= button_to "Generate Report",
+                    chama_agent_reports_path(chama),
+                    method: :post,
+                    data: { turbo_frame: "agent_report" },
+                    class: "bg-black text-white px-4 py-2 rounded hover:bg-gray-800" %>
+    </div>
+
+    <% if report_content %>
+      <div class="flex items-center gap-4 mb-4">
+        <div class="text-5xl font-bold <%= report_content['health_score'] >= 70 ? 'text-green-600' : report_content['health_score'] >= 40 ? 'text-yellow-600' : 'text-red-600' %>">
+          <%= report_content["health_score"] %>
+        </div>
+        <div>
+          <div class="text-sm text-gray-500 uppercase tracking-wide">Health Score</div>
+          <div class="text-xs text-gray-400">Generated <%= time_ago_in_words(latest_report.generated_at) %> ago</div>
+        </div>
+      </div>
+
+      <p class="text-gray-800 leading-relaxed mb-6">
+        <%= report_content["narrative"] %>
+      </p>
+
+      <div class="mb-6">
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-500 mb-2">Suggested Actions</h3>
+        <ul class="space-y-2">
+          <% (report_content["suggested_actions"] || []).each do |action| %>
+            <li class="flex gap-2">
+              <span class="text-gray-400">→</span>
+              <span class="text-gray-800"><%= action %></span>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-500 mb-2">Proposed Meeting Agenda</h3>
+        <ul class="space-y-2">
+          <% (report_content["meeting_agenda_items"] || []).each do |item| %>
+            <li class="flex gap-2">
+              <span class="text-gray-400">•</span>
+              <span class="text-gray-800"><%= item %></span>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% else %>
+      <p class="text-gray-500 italic">No health report generated yet. Click the button above.</p>
+    <% end %>
+  </section>
+<% end %>
