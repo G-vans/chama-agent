@@ -37,14 +37,20 @@
                 <div class="text-sm text-gray-500"><%= member.phone %></div>
               </div>
 
-              <div class="text-right">
-                <% if member.status == "up_to_date" %>
-                  <span class="text-sm text-green-700 font-medium">✓ Up to date</span>
-                  <div class="text-xs text-gray-500">Paid KES <%= number_with_delimiter(member.total_paid) %></div>
-                <% else %>
-                  <span class="text-sm text-red-700 font-medium">! KES <%= number_with_delimiter(member.arrears) %> due</span>
-                  <div class="text-xs text-gray-500"><%= member.months_behind %> month<%= "s" if member.months_behind > 1 %> behind</div>
-                <% end %>
+              <div class="flex items-center gap-6">
+                <div class="text-right">
+                  <% if member.status == "up_to_date" %>
+                    <span class="text-sm text-green-700 font-medium">✓ Up to date</span>
+                    <div class="text-xs text-gray-500">Paid KES <%= number_with_delimiter(member.total_paid) %></div>
+                  <% else %>
+                    <span class="text-sm text-red-700 font-medium">! KES <%= number_with_delimiter(member.arrears) %> due</span>
+                    <div class="text-xs text-gray-500"><%= member.months_behind %> month<%= "s" if member.months_behind > 1 %> behind</div>
+                  <% end %>
+                </div>
+
+                <%= link_to "Statement",
+                            statement_member_path(member),
+                            class: "text-sm text-blue-600 hover:text-blue-800 hover:underline" %>
               </div>
             </div>
           <% end %>
