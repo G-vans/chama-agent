@@ -5,7 +5,10 @@
       <%= button_to "Generate Report",
                     chama_agent_reports_path(chama),
                     method: :post,
-                    data: { turbo_frame: "agent_report" },
+                    data: {
+                        turbo_frame: "agent_report",
+                        turbo_submits_with: "Generating..."
+                    },
                     class: "bg-black text-white px-4 py-2 rounded hover:bg-gray-800" %>
     </div>
 
