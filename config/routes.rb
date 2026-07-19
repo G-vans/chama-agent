@@ -16,4 +16,10 @@ Rails.application.routes.draw do
   resources :chamas, only: [:index, :show] do
     resources :agent_reports, only: [:create]
   end
+
+  resources :members, only: [] do
+    member do
+      get :statement
+    end
+  end
 end
