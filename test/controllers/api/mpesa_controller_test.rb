@@ -42,6 +42,28 @@ class Api::MpesaControllerTest < ActionDispatch::IntegrationTest
     assert_equal({ "ResultCode" => 0, "ResultDesc" => "Accepted" }, response.parsed_body)
   end
 
+  test "demo mode completes a failed sandbox callback for its correlated member" do
+    original_cache = Rails.cache
+    original_demo_mode = ENV["DARAJA_DEMO_MODE"]
+    Rails.cache = ActiveSupport::Cache::MemoryStore.new
+    ENV["DARAJA_DEMO_MODE"] = "true"
+    member = members(:one)
+    Rails.cache.write("daraja:checkout:checkout-id", member.id)
+
+    assert_difference("Contribution.count", 1) do
+      post api_mpesa_callback_url, params: failed_payload, as: :json
+    end
+
+    contribution = Contribution.order(:created_at).last
+    assert_equal member, contribution.member
+    assert_equal member.chama.contribution_amount, contribution.amount
+    assert_equal "DEMO-heckout-id", contribution.mpesa_receipt
+    assert_equal "completed", contribution.status
+  ensure
+    Rails.cache = original_cache
+    ENV["DARAJA_DEMO_MODE"] = original_demo_mode
+  end
+
   private
 
   def successful_payload
@@ -60,6 +82,19 @@ class Api::MpesaControllerTest < ActionDispatch::IntegrationTest
               { Name: "PhoneNumber", Value: 254_708_374_149 }
             ]
           }
+        }
+      }
+    }
+  end
+
+  def failed_payload
+    {
+      Body: {
+        stkCallback: {
+          MerchantRequestID: "merchant-id",
+          CheckoutRequestID: "checkout-id",
+          ResultCode: 1037,
+          ResultDesc: "DS timeout user cannot be reached."
         }
       }
     }
