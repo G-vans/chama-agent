@@ -29,6 +29,8 @@
                 latest_report: @latest_report,
                 report_content: @report_content %>
 
+      <%= render "chat_analysis", chama: @chama, chat_analysis: @latest_chat_analysis %>
+
       <!-- Members Section -->
       <section class="bg-white border rounded-lg p-6 shadow-sm">
         <h2 class="text-xl font-semibold mb-4">Members</h2>

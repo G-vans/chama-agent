@@ -13,6 +13,7 @@ chama.update!(contribution_amount: 5000, frequency: "monthly")
 
 # Reset this chama's generated data so every rehearsal starts from the same story.
 AgentReport.where(chama: chama).delete_all
+ChatAnalysis.where(chama: chama).delete_all
 Contribution.where(member_id: chama.member_ids).delete_all
 Member.where(chama: chama).delete_all
 

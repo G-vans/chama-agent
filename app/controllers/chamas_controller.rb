@@ -10,5 +10,6 @@ class ChamasController < ApplicationController
     @members = @chama.members.includes(:contributions).order(:name)
     @latest_report = @chama.agent_reports.order(generated_at: :desc).first
     @report_content = @latest_report ? JSON.parse(@latest_report.content) : nil
+    @latest_chat_analysis = @chama.chat_analyses.order(analyzed_at: :desc).first
   end
 end

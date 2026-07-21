@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_17_144755) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_21_170000) do
   create_table "agent_reports", force: :cascade do |t|
     t.integer "chama_id", null: false
     t.text "content"
@@ -26,6 +26,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_17_144755) do
     t.string "frequency"
     t.string "name"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "chat_analyses", force: :cascade do |t|
+    t.datetime "analyzed_at", null: false
+    t.integer "chama_id", null: false
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.text "source_text", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chama_id"], name: "index_chat_analyses_on_chama_id"
   end
 
   create_table "contributions", force: :cascade do |t|
@@ -50,6 +60,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_17_144755) do
   end
 
   add_foreign_key "agent_reports", "chamas"
+  add_foreign_key "chat_analyses", "chamas"
   add_foreign_key "contributions", "members"
   add_foreign_key "members", "chamas"
 end

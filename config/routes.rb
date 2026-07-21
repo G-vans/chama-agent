@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   root "chamas#index"
   resources :chamas, only: [:index, :show] do
     resources :agent_reports, only: [:create]
+    resources :chat_analyses, only: [:create]
     resources :contributions, only: [:create]
   end
 
