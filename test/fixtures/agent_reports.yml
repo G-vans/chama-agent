@@ -2,10 +2,10 @@
 
 one:
   chama: one
-  content: MyText
+  content: '{"health_score":75,"narrative":"Test report","suggested_actions":[],"meeting_agenda_items":[]}'
   generated_at: 2026-07-17 17:47:55
 
 two:
   chama: two
-  content: MyText
+  content: '{"health_score":75,"narrative":"Test report","suggested_actions":[],"meeting_agenda_items":[]}'
   generated_at: 2026-07-17 17:47:55

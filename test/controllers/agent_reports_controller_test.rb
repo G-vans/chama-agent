@@ -1,8 +1,10 @@
 require "test_helper"
 
 class AgentReportsControllerTest < ActionDispatch::IntegrationTest
-  test "should get create" do
-    get agent_reports_create_url
-    assert_response :success
+  test "routes report creation under a chama" do
+    assert_routing(
+      { method: "post", path: "/chamas/1/agent_reports" },
+      { controller: "agent_reports", action: "create", chama_id: "1" }
+    )
   end
 end
