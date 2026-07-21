@@ -1,6 +1,6 @@
 class AgentReportService
-  # Use gpt-4o-mini for iteration (cheap), swap to "gpt-5.6" for final demo runs
-  MODEL = ENV.fetch("AGENT_MODEL", "gpt-4o-mini").freeze
+  # Build Week requires the shipped experience to run on GPT-5.6.
+  MODEL = "gpt-5.6".freeze
 
   def initialize(chama)
     @chama = chama
@@ -60,8 +60,7 @@ class AgentReportService
         messages: [
           { role: "system", content: system_prompt },
           { role: "user", content: user_prompt(context) }
-        ],
-        temperature: 0.4
+        ]
       }
     )
   end
