@@ -1,4 +1,5 @@
 require "active_support/core_ext/integer/time"
+require "uri"
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -14,6 +15,12 @@ Rails.application.configure do
 
   # Enable server timing.
   config.server_timing = true
+
+  # Daraja posts callbacks through the public ngrok URL configured in .env.
+  # Permit only that exact tunnel host rather than disabling host authorization.
+  if ENV["DARAJA_CALLBACK_URL"].present?
+    config.hosts << URI.parse(ENV["DARAJA_CALLBACK_URL"]).host
+  end
 
   # Enable/disable Action Controller caching. By default Action Controller caching is disabled.
   # Run rails dev:cache to toggle Action Controller caching.
