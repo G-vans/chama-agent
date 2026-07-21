@@ -1,6 +1,6 @@
-<%= turbo_frame_tag "agent_report" do %>
-  <section class="bg-white border rounded-lg p-6 shadow-sm">
-    <div class="max-w-4xl mx-auto p-6 space-y-8">
+<%= turbo_frame_tag "chama_dashboard", class: "block w-full", style: "display: block; width: 100%;" do %>
+  <section class="w-full bg-white border rounded-lg p-6 shadow-sm">
+    <div class="w-full max-w-6xl mx-auto p-6 space-y-8">
 
       <!-- Header -->
       <div class="border-b pb-4">
@@ -13,11 +13,9 @@
       </div>
 
       <!-- Flash -->
-      <% if notice %>
-        <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded">
-          <%= notice %>
-        </div>
-      <% end %>
+      <div id="flash">
+        <%= render "shared/flash", notice: notice, alert: alert %>
+      </div>
 
       <!-- Health Report Section (now a partial for Turbo Stream targeting) -->
       <%= render "agent_report",
@@ -29,32 +27,13 @@
       <section class="bg-white border rounded-lg p-6 shadow-sm">
         <h2 class="text-xl font-semibold mb-4">Members</h2>
 
+        <%= turbo_stream_from "chama_#{@chama.id}_members" %>
+
         <div class="divide-y">
-          <% @members.each do |member| %>
-            <div class="flex justify-between items-center py-3">
-              <div>
-                <div class="font-medium text-gray-900"><%= member.name %></div>
-                <div class="text-sm text-gray-500"><%= member.phone %></div>
-              </div>
-
-              <div class="flex items-center gap-6">
-                <div class="text-right">
-                  <% if member.status == "up_to_date" %>
-                    <span class="text-sm text-green-700 font-medium">✓ Up to date</span>
-                    <div class="text-xs text-gray-500">Paid KES <%= number_with_delimiter(member.total_paid) %></div>
-                  <% else %>
-                    <span class="text-sm text-red-700 font-medium">! KES <%= number_with_delimiter(member.arrears) %> due</span>
-                    <div class="text-xs text-gray-500"><%= member.months_behind %> month<%= "s" if member.months_behind > 1 %> behind</div>
-                  <% end %>
-                </div>
-
-                <%= link_to "Statement",
-                            statement_member_path(member),
-                            data: { turbo: false },
-                            class: "text-sm text-blue-600 hover:text-blue-800 hover:underline" %>
-              </div>
-            </div>
-          <% end %>
+          <%= render partial: "members/member_row",
+                     collection: @members,
+                     as: :member,
+                     locals: { chama: @chama, pending: false } %>
         </div>
       </section>
 

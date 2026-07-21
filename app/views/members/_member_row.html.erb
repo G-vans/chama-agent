@@ -1,0 +1,39 @@
+<div id="<%= dom_id(member) %>" class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 py-4">
+  <div>
+    <div class="font-medium text-gray-900"><%= member.name %></div>
+    <div class="text-sm text-gray-500"><%= member.phone %></div>
+  </div>
+
+  <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
+    <div class="sm:text-right sm:min-w-36">
+      <% if local_assigns[:payment_failed] %>
+        <span class="text-sm text-red-700 font-medium">M-PESA request failed</span>
+        <div class="text-xs text-gray-500">Please try again</div>
+      <% elsif pending %>
+        <span class="text-sm text-amber-700 font-medium">Payment pending</span>
+        <div class="text-xs text-gray-500">Waiting for M-PESA confirmation</div>
+      <% elsif member.status == "up_to_date" %>
+        <span class="text-sm text-green-700 font-medium">✓ Up to date</span>
+        <div class="text-xs text-gray-500">Paid KES <%= number_with_delimiter(member.total_paid) %></div>
+      <% else %>
+        <span class="text-sm text-red-700 font-medium">! KES <%= number_with_delimiter(member.arrears) %> due</span>
+        <div class="text-xs text-gray-500"><%= member.months_behind %> month<%= "s" if member.months_behind > 1 %> behind</div>
+      <% end %>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-3">
+      <%= button_to "Request Contribution",
+                    chama_contributions_path(chama),
+                    params: { member_id: member.id },
+                    method: :post,
+                    form: { data: { turbo: true } },
+                    data: { turbo_submits_with: "Sending..." },
+                    class: "text-sm bg-green-700 text-white px-3 py-2 rounded hover:bg-green-800 whitespace-nowrap" %>
+
+      <%= link_to "Statement",
+                  statement_member_path(member),
+                  data: { turbo: false },
+                  class: "text-sm text-blue-600 hover:text-blue-800 hover:underline" %>
+    </div>
+  </div>
+</div>

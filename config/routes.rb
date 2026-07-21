@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get "agent_reports/create"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -15,7 +14,10 @@ Rails.application.routes.draw do
   root "chamas#index"
   resources :chamas, only: [:index, :show] do
     resources :agent_reports, only: [:create]
+    resources :contributions, only: [:create]
   end
+
+  post "/api/mpesa/callback", to: "api/mpesa#callback"
 
   resources :members, only: [] do
     member do
