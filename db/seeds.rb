@@ -8,15 +8,17 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-chama = Chama.create!(
-  name: "Demo Chama",
-  contribution_amount: 5000,
-  frequency: "monthly"
-)
+chama = Chama.find_or_initialize_by(name: "Demo Chama")
+chama.update!(contribution_amount: 5000, frequency: "monthly")
 
-# All members joined 90 days ago = 3 months expected contributions each
+# Reset this chama's generated data so every rehearsal starts from the same story.
+AgentReport.where(chama: chama).delete_all
+Contribution.where(member_id: chama.member_ids).delete_all
+Member.where(chama: chama).delete_all
+
+# At 89 days, Member#months_since_joined consistently expects three payments.
 members_data = [
-  { name: "Jane Doe",      phone: "254708374149", months_paid: 3 },  # Up to date
+  { name: "Jane Doe",      phone: "254708374149", months_paid: 2 },  # Demo target: KES 5,000 behind
   { name: "Peter Kariuki", phone: "254722334455", months_paid: 3 },  # Up to date
   { name: "Mary Wanjiku",  phone: "254733445566", months_paid: 2 },  # 1 month behind (KES 5,000)
   { name: "Samuel Otieno", phone: "254744556677", months_paid: 1 },  # 2 months behind (KES 10,000)
@@ -28,18 +30,18 @@ members_data.each do |data|
     name: data[:name],
     phone: data[:phone],
     chama: chama,
-    joined_at: 90.days.ago.to_date
+    joined_at: 89.days.ago.to_date
   )
 
   data[:months_paid].times do |m|
     Contribution.create!(
       member: member,
       amount: chama.contribution_amount,
-      mpesa_receipt: "DEMO#{SecureRandom.hex(4).upcase}",
+      mpesa_receipt: "SEED-#{member.name.parameterize.upcase}-#{m + 1}",
       paid_at: (m + 1).months.ago,
       status: "completed"
     )
   end
 end
 
-puts "Seeded: #{Chama.count} chama, #{Member.count} members, #{Contribution.count} contributions"
+puts "Seeded Demo Chama: #{chama.members.count} members, #{Contribution.where(member: chama.members).count} contributions"
